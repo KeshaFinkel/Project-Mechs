@@ -1,8 +1,15 @@
-var http = require('http');
-var http = require('mysql');
+var express = require('express');
+var app = express();
+var http = require('http').Server(app);
+var path = require('path');
 
-var server = http.createServer(function(req, res) {
-    res.writeHead(200);
-    res.end('Hello Http');
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', function(req, res){
+    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index.html');
 });
-server.listen(8080);
+
+http.listen(3000, function(){
+    console.log('listening on *:3000');
+});
