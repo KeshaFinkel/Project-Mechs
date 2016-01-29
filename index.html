@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="modules/common.js"></script>
+    <script src="modules/combat.js"></script>
+    <title></title>
+    <style>
+        #player,#enemy {
+            float: left;
+            padding: 10px;
+            border: 2px solid #333;
+        }
+        #enemy {
+            border-color: #900;
+        }
+        .enemy {background-color: #900;}
+        #player {
+            border-color: #009;
+        }
+        .player {background-color: #009;}
+        #field {
+            border: 1px solid #000;
+            width: 200px;
+            height: 20px;
+            box-sizing: border-box;
+            font-size: 0;
+            clear: both;
+        }
+        #field div {
+            width: 10%;
+            border: 1px solid #333333;
+            box-sizing: border-box;
+            height: 100%;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div id="player">
+
+</div>
+<div id="enemy">
+
+</div>
+<div id="field">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+<button onclick="atack()">Atack</button>
+<script>
+    var armor = {
+        p: 0,
+        h:0,
+        e:0
+    }
+    var shield = {
+        type: 0,
+        def:0,
+        dmg:0
+    }
+ var a = new MechCombat(100,armor,100,10,100,10,shield,5,'player');
+ var b = new MechCombat(100,armor,100,10,100,10,shield,4,'enemy');
+    document.addEventListener("DOMContentLoaded", function(event) {
+        echoStats(a,document.querySelector('#player'));
+        echoStats(b,document.querySelector('#enemy'));
+        echoField(a,b);
+    });
+    function atack(){
+        var dmg = {
+            dmg: 10,
+            type: 'h',
+            dmg_sub: 5,
+            dmg_max: 1,
+            dmg_arm: 1
+        }
+        damaging(dmg,b);
+    }
+</script>
+</body>
+</html>
