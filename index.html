@@ -67,11 +67,17 @@
         def:0,
         dmg:0
     }
-    var shotgun = new Weapon(1,100,'h',10,1,1);
+    var orientation = 1;
+    var shotgun = new Weapon(1,100,'h',10,1,1,2);
     var player = new MechCombat(100,armor,100,10,100,10,shield,3,'player',[shotgun]);
     var enemy = new MechCombat(100,armor,100,10,100,10,shield,6,'enemy',[shotgun]);
+    if (player.pos < enemy.pos){
+        orientation = -1;
+    } else {
+        orintation = 1;
+    }
     document.addEventListener("DOMContentLoaded", function(event) {
-        init(player,enemy);
+        init(player,enemy,orientation);
     });
 </script>
 </body>

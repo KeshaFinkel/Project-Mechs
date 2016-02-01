@@ -4,14 +4,21 @@ function Shield(type,def,dmg){
     this.def = def; // pogloshenie 0 - 1
     this.dmg = dmg; // stoimost pogloshenia
 }
+//legs
+function legs(){
+    this.main = main;//regular move
+    this.secondary = second;//sondary move like jump or smthn
+    this.dmg = dmg;//legs damage - class Weapon
+}
 //weapon proto
-function Weapon(dmg_min,dmg_max,type,sub,sub_max,arm){
+function Weapon(dmg_min,dmg_max,type,sub,sub_max,arm,knock){
     this.min = dmg_min;//minimum dmg
     this.max = dmg_max;//maximum dmg
     this.type = type;//type of dmg heat/phys/electro
     this.sub = sub;// sub dmg for heat and electro weapons
     this.sub_max = sub_max;//damage to maximum of sub stat
     this.arm = arm;//damage to enemy armor
+    this.knock_back = knock;//pushin/pulling abilities od weapon
 }
 /*Mech prototype for combat*/
 function MechCombat(hp,armor,energy,energy_regen,heat,heat_regen,shield,pos,side,weapons){
@@ -57,7 +64,7 @@ function afterDmg(mech){
 
 /*actions*/
 //damagin dmg - weapon, mechD - victim
-function damaging(dmg,mechD) {
+function damaging(dmg,mechD,orientation) {
     var damage = Math.floor(Math.random() * (dmg.max - dmg.min + 1)) + dmg.min;
     console.log(damage);
     var damage_full = 0;
@@ -92,6 +99,7 @@ function damaging(dmg,mechD) {
     }
     mechD.hp_cur -= damage_hp;
     mechD.armor_cur[dmg.type] -= dmg.arm;
+    mechD.position += dmg.knock_back*orientation;//make check on collission!
     afterDmg(mechD);
 }
 /*drawing*/
