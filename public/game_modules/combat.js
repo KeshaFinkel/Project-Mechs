@@ -4,16 +4,17 @@ function Shield(type,def,dmg){
     this.def = def; // pogloshenie 0 - 1
     this.dmg = dmg; // stoimost pogloshenia
 }
-//damage prototype
-function Damage(type,dmg,dmg_sub,dmg_max){
-    this.type = type;//type of dmg
-    this.dmg = dmg || 0;//dmg
-    this.dmg_sub = dmg_sub || 0;//sub dmg(heat or el)
-    this.dmg_max = dmg_max || 0; //sub dmg to max of stat
-    this.dmg_arm = dmg_res.p || 0; //sub dmg to phys resist
+//weapon proto
+function Weapon(dmg_min,dmg_max,type,sub,sub_max,arm){
+    this.min = dmg_min;//minimum dmg
+    this.max = dmg_max;//maximum dmg
+    this.type = type;//type of dmg heat/phys/electro
+    this.sub = sub;// sub dmg for heat and electro weapons
+    this.sub_max = sub_max;//damage to maximum of sub stat
+    this.arm = arm;//damage to enemy armor
 }
 /*Mech prototype for combat*/
-function MechCombat(hp,armor,energy,energy_regen,heat,heat_regen,shield,pos,side){
+function MechCombat(hp,armor,energy,energy_regen,heat,heat_regen,shield,pos,side,weapons){
     this.hp = hp;//health
     this.armor = {
         p: armor.p || 0,
@@ -37,6 +38,7 @@ function MechCombat(hp,armor,energy,energy_regen,heat,heat_regen,shield,pos,side
     this.heat_regen_cur = heat_regen;//heat regeneration
     this.position = pos; // position on field 0 - 10
     this.side = side; //player or enemy true/false
+    this.weapons = weapons;
 }
 
 /*checks*/
@@ -54,19 +56,22 @@ function afterDmg(mech){
 }
 
 /*actions*/
+//damagin dmg - weapon, mechD - victim
 function damaging(dmg,mechD) {
+    var damage = Math.floor(Math.random() * (dmg.max - dmg.min + 1)) + dmg.min;
+    console.log(damage);
     var damage_full = 0;
     var damage_hp = 0;
     var damage_sub = 0;
     var damage_max = 0;
     var damage_shield = 0;
     //calculate damages
-    damage_full = (dmg.dmg - mechD.armor_cur[dmg.type]);
+    damage_full = (damage - mechD.armor_cur[dmg.type]);
     if (damage_full < 0){damage_full = 0;}
     damage_hp = damage_full*(1 - mechD.shield.def);
 
-    damage_sub += dmg.dmg_sub;
-    damage_max += dmg.dmg_max;
+    damage_sub += dmg.sub;
+    damage_max += dmg.sub_max;
 
     damage_shield += damage_full * mechD.shield.def * mechD.shield.dmg;
     //deal damage
@@ -86,7 +91,7 @@ function damaging(dmg,mechD) {
         mechD.energy_cur -= damage_shield;
     }
     mechD.hp_cur -= damage_hp;
-    mechD.armor_cur[dmg.type] -= dmg.dmg_arm;
+    mechD.armor_cur[dmg.type] -= dmg.arm;
     afterDmg(mechD);
 }
 /*drawing*/
@@ -106,4 +111,9 @@ function echoField(player,enemy){
 /*etc.*/
 function win(){
     alert('pobeda');
+}
+function init(player,enemy){
+    echoStats(player,document.querySelector('#player'));
+    echoStats(enemy,document.querySelector('#enemy'));
+    echoField(player,enemy);
 }

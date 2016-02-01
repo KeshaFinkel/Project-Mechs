@@ -55,7 +55,7 @@
     <div></div>
     <div></div>
 </div>
-<button onclick="atack()">Atack</button>
+<button onclick="damaging(shotgun,enemy)">Atack enemy</button>
 <script>
     var armor = {
         p: 0,
@@ -67,23 +67,12 @@
         def:0,
         dmg:0
     }
- var a = new MechCombat(100,armor,100,10,100,10,shield,5,'player');
- var b = new MechCombat(100,armor,100,10,100,10,shield,4,'enemy');
+    var shotgun = new Weapon(1,100,'h',10,1,1);
+    var player = new MechCombat(100,armor,100,10,100,10,shield,3,'player',[shotgun]);
+    var enemy = new MechCombat(100,armor,100,10,100,10,shield,6,'enemy',[shotgun]);
     document.addEventListener("DOMContentLoaded", function(event) {
-        echoStats(a,document.querySelector('#player'));
-        echoStats(b,document.querySelector('#enemy'));
-        echoField(a,b);
+        init(player,enemy);
     });
-    function atack(){
-        var dmg = {
-            dmg: 10,
-            type: 'h',
-            dmg_sub: 5,
-            dmg_max: 1,
-            dmg_arm: 1
-        }
-        damaging(dmg,b);
-    }
 </script>
 </body>
 </html>
